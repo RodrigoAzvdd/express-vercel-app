@@ -1,8 +1,9 @@
 # express-vercel-app
 
-## Rota para API:
+## Endpoint API:
 - `https://express-server-self-phi.vercel.app/`
 
-## Rota para POST - Buscar NCM - VALIDAÇÃO:
+## Endpoint POST - Buscar NCM - VALIDAÇÃO:
 - `https://express-server-self-phi.vercel.app/ncm`
-- body: { codigo: '0306.93.00' }
+- `body: { codigo: '0306.93.00' }`
+
