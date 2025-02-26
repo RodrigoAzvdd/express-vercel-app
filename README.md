@@ -47,6 +47,3 @@ fetch('https://express-server-self-phi.vercel.app/ncm', {
 .then(data => console.log(data))
 .catch(error => console.error('Erro:', error));
 ```
-
-Este README fornece uma visão clara dos endpoints disponíveis e como utilizá-los.
-
