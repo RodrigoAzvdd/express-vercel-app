@@ -1,15 +1,17 @@
 {
-  "name": "express-server",
+  "name": "express-vercel-app",
   "version": "1.0.0",
+  "description": "Servidor Express hospedado na Vercel",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node api/index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "express": "^4.21.2"
-  }
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": "16.x"
+  },
+  "license": "ISC"
 }
