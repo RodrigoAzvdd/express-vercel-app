@@ -40,6 +40,7 @@ const swaggerDocument = {
             "get": {
                 "summary": "Verifica se a API está funcionando",
                 "description": "Retorna \"pong\" para confirmar que a API está online",
+                "tags": ["TESTE"],
                 "responses": {
                     "200": {
                         "description": "Resposta bem-sucedida",
