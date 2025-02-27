@@ -252,7 +252,7 @@ const swaggerDocument = {
                 }
             }
         },
-        "/ncm/all": {
+        "/ncm/": {
             "get": {
                 "summary": "Obter todos os NCMs disponíveis",
                 "description": "Retorna todos os dados de NCM disponíveis no SISCOMEX",
