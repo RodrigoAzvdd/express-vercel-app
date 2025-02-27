@@ -4,13 +4,15 @@ const ncmRouter = require('../routes/ncmRouter')
 const path = require('path');
 const fs = require('fs');
 
-// Middleware para permitir apenas conexões do IP específico
+// IP permitido
 const allowedIP = "200.253.9.130";
 
 app.use((req, res, next) => {
-    const clientIP = req.ip || req.connection.remoteAddress;
+    const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-    if (clientIP !== allowedIP) {
+    console.log("IP do cliente:", clientIP); // Para debug
+
+    if (!clientIP.includes(allowedIP)) {
         return res.status(403).json({ message: "Acesso negado" });
     }
 
