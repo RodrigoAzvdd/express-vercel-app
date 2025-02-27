@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
+const ncmRouter = require('../routes/ncmRouter')
 const path = require('path');
+const fs = require('fs');
 
 // Configuração CORS
 app.use((req, res, next) => {
@@ -335,43 +337,43 @@ app.get('/swagger.json', (req, res) => {
 // Servir a interface Swagger UI estática na rota principal
 app.get('/', (req, res) => {
     const htmlContent = `
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>API de Verificação de NCM - Documentação</title>
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css">
-  <style>
-    html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
-    *, *:before, *:after { box-sizing: inherit; }
-    body { margin: 0; background: #fafafa; }
-  </style>
-</head>
-<body>
-  <div id="swagger-ui"></div>
-  <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js"></script>
-  <script>
-    window.onload = function() {
-      const ui = SwaggerUIBundle({
-        url: "/swagger.json",
-        dom_id: '#swagger-ui',
-        deepLinking: true,
-        presets: [
-          SwaggerUIBundle.presets.apis,
-          SwaggerUIStandalonePreset
-        ],
-        plugins: [
-          SwaggerUIBundle.plugins.DownloadUrl
-        ],
-        layout: "BaseLayout"
-      });
-      window.ui = ui;
-    };
-  </script>
-</body>
-</html>
-  `;
+  <!DOCTYPE html>
+  <html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <title>API de Verificação de NCM - Documentação</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css">
+    <style>
+      html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
+      *, *:before, *:after { box-sizing: inherit; }
+      body { margin: 0; background: #fafafa; }
+    </style>
+  </head>
+  <body>
+    <div id="swagger-ui"></div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js"></script>
+    <script>
+      window.onload = function() {
+        const ui = SwaggerUIBundle({
+          url: "/swagger.json",
+          dom_id: '#swagger-ui',
+          deepLinking: true,
+          presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIStandalonePreset
+          ],
+          plugins: [
+            SwaggerUIBundle.plugins.DownloadUrl
+          ],
+          layout: "BaseLayout"
+        });
+        window.ui = ui;
+      };
+    </script>
+  </body>
+  </html>
+    `;
     res.send(htmlContent);
 });
 
@@ -382,25 +384,7 @@ app.get('/ping', (req, res) => {
     });
 });
 
-// Rotas do NcmController
-const NcmController = require('./controllers/NcmController');
-
-// Rota para obter todos os NCMs
-app.get('/ncm/all', NcmController.getAll);
-
-// Rota para obter NCM por código via body
-app.post('/ncm', NcmController.getNcmByCode);
-
-// Rota para obter NCM por código via parâmetro
-app.get('/ncm/:codigo', NcmController.getNcmByCodeParam);
+app.use('/ncm', ncmRouter)
 
 // Exportar o app para a Vercel
 module.exports = app;
-
-// // Se precisar iniciar em ambiente local
-// if (process.env.NODE_ENV !== 'production') {
-//     const PORT = process.env.PORT || 3000;
-//     app.listen(PORT, () => {
-//         console.log(`Servidor rodando na porta ${PORT}`);
-//     });
-// }
