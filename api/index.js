@@ -4,6 +4,19 @@ const ncmRouter = require('../routes/ncmRouter')
 const path = require('path');
 const fs = require('fs');
 
+// Middleware para permitir apenas conexões do IP específico
+const allowedIP = "200.253.9.130";
+
+app.use((req, res, next) => {
+    const clientIP = req.ip || req.connection.remoteAddress;
+
+    if (clientIP !== allowedIP) {
+        return res.status(403).json({ message: "Acesso negado" });
+    }
+
+    next();
+});
+
 // Configuração CORS
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
