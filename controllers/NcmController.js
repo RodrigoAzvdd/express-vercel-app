@@ -40,7 +40,13 @@ module.exports = {
                     res.json({
                         valido: true,
                         mensagem: "NCM válido",
-                        descricao: ncmValido.Descricao || "Sem descrição disponível"
+                        codigo: ncmValido.Codigo,
+                        descricao: ncmValido.Descricao || "Sem descrição disponível",
+                        data_inicio: ncmValido.Data_Inicio,
+                        data_fim: ncmValido.Data_Fim,
+                        tipo_ato_ini: ncmValido.Tipo_Ato_Ini,
+                        numero_ato_ini: ncmValido.Numero_Ato_Ini,
+                        ano_ato_ini: ncmValido.Ano_Ato_Ini
                     });
                 } else {
                     res.json({
@@ -77,7 +83,13 @@ module.exports = {
                     res.json({
                         valido: true,
                         mensagem: "NCM válido",
-                        descricao: ncmValido.Descricao || "Sem descrição disponível"
+                        codigo: ncmValido.Codigo,
+                        descricao: ncmValido.Descricao || "Sem descrição disponível",
+                        data_inicio: ncmValido.Data_Inicio,
+                        data_fim: ncmValido.Data_Fim,
+                        tipo_ato_ini: ncmValido.Tipo_Ato_Ini,
+                        numero_ato_ini: ncmValido.Numero_Ato_Ini,
+                        ano_ato_ini: ncmValido.Ano_Ato_Ini
                     });
                 } else {
                     res.json({
