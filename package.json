@@ -7,9 +7,10 @@
     "start": "node api/index.js"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
-  "devDependencies": {},
   "engines": {
     "node": "22.x"
   },
