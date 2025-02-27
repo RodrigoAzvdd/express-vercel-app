@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const ncmRouter = require('../routes/ncmRouter')
 const path = require('path');
 const fs = require('fs');
 
@@ -191,42 +192,44 @@ app.get('/ping', (req, res) => {
     });
 });
 
+app.use('/ncm', ncmRouter)
+
 // Rota para verificar NCM
-app.post('/ncm', (req, res) => {
-    const { codigo } = req.body;
+// app.post('/ncm', (req, res) => {
+//     const { codigo } = req.body;
 
-    if (!codigo) {
-        return res.json({ valido: false, mensagem: "Código NCM não fornecido" });
-    }
+//     if (!codigo) {
+//         return res.json({ valido: false, mensagem: "Código NCM não fornecido" });
+//     }
 
-    fetch('https://portalunico.siscomex.gov.br/classif/api/publico/nomenclatura/download/json')
-        .then(response => response.json())
-        .then(data => {
-            // Verificar se o NCM existe nos dados
-            const ncmValido = data.Nomenclaturas.find(item => item.Codigo === String(codigo));
+//     fetch('https://portalunico.siscomex.gov.br/classif/api/publico/nomenclatura/download/json')
+//         .then(response => response.json())
+//         .then(data => {
+//             // Verificar se o NCM existe nos dados
+//             const ncmValido = data.Nomenclaturas.find(item => item.Codigo === String(codigo));
 
-            if (ncmValido) {
-                res.json({
-                    valido: true,
-                    mensagem: "NCM válido",
-                    descricao: ncmValido.Descricao || "Sem descrição disponível"
-                });
-            } else {
-                res.json({
-                    valido: false,
-                    mensagem: "NCM inválido"
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao buscar o JSON:', error);
-            res.status(500).json({
-                valido: false,
-                mensagem: "Erro ao verificar NCM",
-                erro: error.message
-            });
-        });
-});
+//             if (ncmValido) {
+//                 res.json({
+//                     valido: true,
+//                     mensagem: "NCM válido",
+//                     descricao: ncmValido.Descricao || "Sem descrição disponível"
+//                 });
+//             } else {
+//                 res.json({
+//                     valido: false,
+//                     mensagem: "NCM inválido"
+//                 });
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Erro ao buscar o JSON:', error);
+//             res.status(500).json({
+//                 valido: false,
+//                 mensagem: "Erro ao verificar NCM",
+//                 erro: error.message
+//             });
+//         });
+// });
 
 // Exportar o app para a Vercel
 module.exports = app;
