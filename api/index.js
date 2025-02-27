@@ -1,8 +1,6 @@
 const express = require('express');
 const app = express();
-const ncmRouter = require('../routes/ncmRouter')
 const path = require('path');
-const fs = require('fs');
 
 // Configuração CORS
 app.use((req, res, next) => {
@@ -62,8 +60,9 @@ const swaggerDocument = {
         },
         "/ncm": {
             "post": {
-                "summary": "Verifica a validade de um código NCM",
-                "description": "Verifica se o código NCM fornecido é válido de acordo com os dados do SISCOMEX",
+                "summary": "Verifica a validade de um código NCM (via body)",
+                "description": "Verifica se o código NCM fornecido no corpo da requisição é válido",
+                "tags": ["NCM"],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -75,7 +74,7 @@ const swaggerDocument = {
                                     "codigo": {
                                         "type": "string",
                                         "description": "O código NCM a ser verificado",
-                                        "example": "01012100"
+                                        "example": "0306.93.00"
                                     }
                                 }
                             }
@@ -98,9 +97,33 @@ const swaggerDocument = {
                                             "type": "string",
                                             "description": "Mensagem sobre o resultado da verificação"
                                         },
+                                        "codigo": {
+                                            "type": "string",
+                                            "description": "Código do NCM"
+                                        },
                                         "descricao": {
                                             "type": "string",
                                             "description": "Descrição do NCM (se for válido)"
+                                        },
+                                        "data_inicio": {
+                                            "type": "string",
+                                            "description": "Data de início da vigência"
+                                        },
+                                        "data_fim": {
+                                            "type": "string",
+                                            "description": "Data de fim da vigência"
+                                        },
+                                        "tipo_ato_ini": {
+                                            "type": "string",
+                                            "description": "Tipo do ato de início"
+                                        },
+                                        "numero_ato_ini": {
+                                            "type": "string",
+                                            "description": "Número do ato de início"
+                                        },
+                                        "ano_ato_ini": {
+                                            "type": "string",
+                                            "description": "Ano do ato de início"
                                         }
                                     }
                                 }
@@ -109,6 +132,173 @@ const swaggerDocument = {
                     },
                     "500": {
                         "description": "Erro ao verificar o NCM",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "valido": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "mensagem": {
+                                            "type": "string",
+                                            "example": "Erro ao verificar NCM"
+                                        },
+                                        "erro": {
+                                            "type": "string",
+                                            "description": "Detalhes do erro"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ncm/{codigo}": {
+            "get": {
+                "summary": "Verifica a validade de um código NCM (via parâmetro)",
+                "description": "Verifica se o código NCM fornecido como parâmetro de URL é válido",
+                "tags": ["NCM"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "codigo",
+                        "required": true,
+                        "description": "Código NCM a ser verificado",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "0306.93.00"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Resultado da verificação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "valido": {
+                                            "type": "boolean",
+                                            "description": "Indica se o NCM é válido"
+                                        },
+                                        "mensagem": {
+                                            "type": "string",
+                                            "description": "Mensagem sobre o resultado da verificação"
+                                        },
+                                        "codigo": {
+                                            "type": "string",
+                                            "description": "Código do NCM"
+                                        },
+                                        "descricao": {
+                                            "type": "string",
+                                            "description": "Descrição do NCM (se for válido)"
+                                        },
+                                        "data_inicio": {
+                                            "type": "string",
+                                            "description": "Data de início da vigência"
+                                        },
+                                        "data_fim": {
+                                            "type": "string",
+                                            "description": "Data de fim da vigência"
+                                        },
+                                        "tipo_ato_ini": {
+                                            "type": "string",
+                                            "description": "Tipo do ato de início"
+                                        },
+                                        "numero_ato_ini": {
+                                            "type": "string",
+                                            "description": "Número do ato de início"
+                                        },
+                                        "ano_ato_ini": {
+                                            "type": "string",
+                                            "description": "Ano do ato de início"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao verificar o NCM",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "valido": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "mensagem": {
+                                            "type": "string",
+                                            "example": "Erro ao verificar NCM"
+                                        },
+                                        "erro": {
+                                            "type": "string",
+                                            "description": "Detalhes do erro"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ncm/all": {
+            "get": {
+                "summary": "Obter todos os NCMs disponíveis",
+                "description": "Retorna todos os dados de NCM disponíveis no SISCOMEX",
+                "tags": ["NCM"],
+                "responses": {
+                    "200": {
+                        "description": "Lista de NCMs",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "Nomenclaturas": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "Codigo": {
+                                                        "type": "string"
+                                                    },
+                                                    "Descricao": {
+                                                        "type": "string"
+                                                    },
+                                                    "Data_Inicio": {
+                                                        "type": "string"
+                                                    },
+                                                    "Data_Fim": {
+                                                        "type": "string"
+                                                    },
+                                                    "Tipo_Ato_Ini": {
+                                                        "type": "string"
+                                                    },
+                                                    "Numero_Ato_Ini": {
+                                                        "type": "string"
+                                                    },
+                                                    "Ano_Ato_Ini": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar NCMs",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -192,52 +382,25 @@ app.get('/ping', (req, res) => {
     });
 });
 
-app.use('/ncm', ncmRouter)
+// Rotas do NcmController
+const NcmController = require('./controllers/NcmController');
 
-// Rota para verificar NCM
-// app.post('/ncm', (req, res) => {
-//     const { codigo } = req.body;
+// Rota para obter todos os NCMs
+app.get('/ncm/all', NcmController.getAll);
 
-//     if (!codigo) {
-//         return res.json({ valido: false, mensagem: "Código NCM não fornecido" });
-//     }
+// Rota para obter NCM por código via body
+app.post('/ncm', NcmController.getNcmByCode);
 
-//     fetch('https://portalunico.siscomex.gov.br/classif/api/publico/nomenclatura/download/json')
-//         .then(response => response.json())
-//         .then(data => {
-//             // Verificar se o NCM existe nos dados
-//             const ncmValido = data.Nomenclaturas.find(item => item.Codigo === String(codigo));
-
-//             if (ncmValido) {
-//                 res.json({
-//                     valido: true,
-//                     mensagem: "NCM válido",
-//                     descricao: ncmValido.Descricao || "Sem descrição disponível"
-//                 });
-//             } else {
-//                 res.json({
-//                     valido: false,
-//                     mensagem: "NCM inválido"
-//                 });
-//             }
-//         })
-//         .catch(error => {
-//             console.error('Erro ao buscar o JSON:', error);
-//             res.status(500).json({
-//                 valido: false,
-//                 mensagem: "Erro ao verificar NCM",
-//                 erro: error.message
-//             });
-//         });
-// });
+// Rota para obter NCM por código via parâmetro
+app.get('/ncm/:codigo', NcmController.getNcmByCodeParam);
 
 // Exportar o app para a Vercel
 module.exports = app;
 
 // Se precisar iniciar em ambiente local
-// if (process.env.NODE_ENV !== 'production') {
-//     const PORT = process.env.PORT || 3000;
-//     app.listen(PORT, () => {
-//         console.log(`Servidor rodando na porta ${PORT}`);
-//     });
-// }
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Servidor rodando na porta ${PORT}`);
+    });
+}
