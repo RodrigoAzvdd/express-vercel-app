@@ -1,12 +1,23 @@
 const express = require('express');
 const app = express();
+const helmet = require('helmet')
 const ncmRouter = require('../routes/ncmRouter')
 const imageRouter = require('../routes/imagesRouter')
+const rateLimit = require('express-rate-limit');
 const path = require('path');
 const fs = require('fs');
 
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100, 
+});
+
+app.use(limiter);
+
 // IP permitido
 const allowedIP = "200.253.9.130";
+
+app.use(helmet())
 
 app.use((req, res, next) => {
     const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
