@@ -1,23 +1,25 @@
 const express = require('express');
 const app = express();
-const helmet = require('helmet')
 const ncmRouter = require('../routes/ncmRouter')
 const imageRouter = require('../routes/imagesRouter')
-const rateLimit = require('express-rate-limit');
 const path = require('path');
 const fs = require('fs');
 
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100, 
-});
-
-app.use(limiter);
+// app.use((req, res, next) => {
+//     res.setHeader("Content-Security-Policy", `
+//         default-src 'self';
+//         script-src 'self' https://cdn.jsdelivr.net;
+//         style-src 'self' https://cdn.jsdelivr.net;
+//         object-src 'none';
+//         connect-src 'self';
+//         font-src 'self' https://fonts.googleapis.com;
+//         img-src 'self' data:;
+//     `);
+//     next();
+// });
 
 // IP permitido
 const allowedIP = "200.253.9.130";
-
-app.use(helmet())
 
 app.use((req, res, next) => {
     const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;

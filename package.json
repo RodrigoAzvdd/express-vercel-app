@@ -4,13 +4,14 @@
   "description": "Servidor Express hospedado na Vercel",
   "main": "index.js",
   "scripts": {
-    "start": "node api/index.js"
+    "dev": "nodemon api/index.js"
   },
   "dependencies": {
     "express": "^4.17.1",
     "express-rate-limit": "^7.5.0",
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.1.9",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "vercel": "^41.3.1"
