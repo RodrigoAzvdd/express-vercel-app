@@ -2,8 +2,11 @@ const express = require('express');
 const app = express();
 const ncmRouter = require('../routes/ncmRouter')
 const imageRouter = require('../routes/imagesRouter')
+const helmet = require('helmet')
 const path = require('path');
 const fs = require('fs');
+
+app.use(helmet())
 
 // app.use((req, res, next) => {
 //     res.setHeader("Content-Security-Policy", `
