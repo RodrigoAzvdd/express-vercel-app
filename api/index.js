@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const ncmRouter = require('../routes/ncmRouter')
+const imageRouter = require('../routes/imagesRouter')
 const path = require('path');
 const fs = require('fs');
 
@@ -401,6 +402,8 @@ app.get('/ping', (req, res) => {
 });
 
 app.use('/ncm', ncmRouter)
+
+app.use('/compareImages', imageRouter)
 
 // Exportar o app para a Vercel
 module.exports = app;
