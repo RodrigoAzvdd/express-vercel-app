@@ -64,6 +64,21 @@ const swaggerDocument = {
             "description": "Servidor atual"
         }
     ],
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "Token de autenticação JWT"
+            }
+        }
+    },
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ],
     "paths": {
         "/ping": {
             "get": {
@@ -72,16 +87,9 @@ const swaggerDocument = {
                 "tags": [
                     "TESTE"
                 ],
-                "parameters": [
+                "security": [
                     {
-                        "in": "header",
-                        "name": "Authorization",
-                        "required": true,
-                        "description": "Token de autenticação",
-                        "schema": {
-                            "type": "string",
-                            "example": "Bearer <seu-token-aqui>"
-                        }
+                        "bearerAuth": []
                     }
                 ],
                 "responses": {
@@ -100,6 +108,26 @@ const swaggerDocument = {
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Não autorizado - Token inválido ou ausente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Token de autenticação necessário"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "A requisição não pôde ser processada porque um token de autenticação válido não foi fornecido"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -111,16 +139,9 @@ const swaggerDocument = {
                 "tags": [
                     "NCM"
                 ],
-                "parameters": [
+                "security": [
                     {
-                        "in": "header",
-                        "name": "Authorization",
-                        "required": true,
-                        "description": "Token de autenticação",
-                        "schema": {
-                            "type": "string",
-                            "example": "Bearer <seu-token-aqui>"
-                        }
+                        "bearerAuth": []
                     }
                 ],
                 "requestBody": {
@@ -192,6 +213,26 @@ const swaggerDocument = {
                             }
                         }
                     },
+                    "401": {
+                        "description": "Não autorizado - Token inválido ou ausente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Token de autenticação necessário"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "A requisição não pôde ser processada porque um token de autenticação válido não foi fornecido"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Erro ao verificar o NCM",
                         "content": {
@@ -226,6 +267,11 @@ const swaggerDocument = {
                 "tags": [
                     "NCM"
                 ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "in": "path",
@@ -236,16 +282,6 @@ const swaggerDocument = {
                             "type": "string"
                         },
                         "example": "0306.93.00"
-                    },
-                    {
-                        "in": "header",
-                        "name": "Authorization",
-                        "required": true,
-                        "description": "Token de autenticação",
-                        "schema": {
-                            "type": "string",
-                            "example": "Bearer <seu-token-aqui>"
-                        }
                     }
                 ],
                 "responses": {
@@ -297,6 +333,26 @@ const swaggerDocument = {
                             }
                         }
                     },
+                    "401": {
+                        "description": "Não autorizado - Token inválido ou ausente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Token de autenticação necessário"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "A requisição não pôde ser processada porque um token de autenticação válido não foi fornecido"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Erro ao verificar o NCM",
                         "content": {
@@ -331,16 +387,9 @@ const swaggerDocument = {
                 "tags": [
                     "NCM"
                 ],
-                "parameters": [
+                "security": [
                     {
-                        "in": "header",
-                        "name": "Authorization",
-                        "required": true,
-                        "description": "Token de autenticação",
-                        "schema": {
-                            "type": "string",
-                            "example": "Bearer <seu-token-aqui>"
-                        }
+                        "bearerAuth": []
                     }
                 ],
                 "responses": {
@@ -385,6 +434,26 @@ const swaggerDocument = {
                             }
                         }
                     },
+                    "401": {
+                        "description": "Não autorizado - Token inválido ou ausente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Token de autenticação necessário"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "A requisição não pôde ser processada porque um token de autenticação válido não foi fornecido"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Erro ao buscar NCMs",
                         "content": {
@@ -415,25 +484,42 @@ const swaggerDocument = {
         "/compareImages": {
             "post": {
                 "summary": "Compara duas imagens",
-                "description": "Compara duas imagens e retorna um resultado de semelhança",
+                "description": "Compara duas imagens e retorna um resultado de semelhança. Suporta múltiplos formatos de envio (JSON com Base64, FormData com arquivos ou URLs)",
                 "tags": [
                     "Imagem"
                 ],
-                "parameters": [
+                "security": [
                     {
-                        "in": "header",
-                        "name": "Authorization",
-                        "required": true,
-                        "description": "Token de autenticação",
-                        "schema": {
-                            "type": "string",
-                            "example": "Bearer <seu-token-aqui>"
-                        }
+                        "bearerAuth": []
                     }
                 ],
                 "requestBody": {
                     "required": true,
                     "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "image1": {
+                                        "type": "string",
+                                        "description": "Primeira imagem codificada em base64 ou URL da imagem",
+                                        "example": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAUDBAQEAwUE..."
+                                    },
+                                    "image2": {
+                                        "type": "string",
+                                        "description": "Segunda imagem codificada em base64 ou URL da imagem",
+                                        "example": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAUDBAQEAwUE..."
+                                    },
+                                    "formato": {
+                                        "type": "string",
+                                        "description": "Formato de envio das imagens",
+                                        "enum": ["base64", "url"],
+                                        "default": "base64"
+                                    }
+                                },
+                                "required": ["image1", "image2"]
+                            }
+                        },
                         "multipart/form-data": {
                             "schema": {
                                 "type": "object",
@@ -441,14 +527,15 @@ const swaggerDocument = {
                                     "image1": {
                                         "type": "string",
                                         "format": "binary",
-                                        "description": "Primeira imagem para comparação"
+                                        "description": "Arquivo da primeira imagem para comparação"
                                     },
                                     "image2": {
                                         "type": "string",
                                         "format": "binary",
-                                        "description": "Segunda imagem para comparação"
+                                        "description": "Arquivo da segunda imagem para comparação"
                                     }
-                                }
+                                },
+                                "required": ["image1", "image2"]
                             }
                         }
                     }
@@ -461,13 +548,65 @@ const swaggerDocument = {
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "semelhança": {
+                                        "same_person": {
+                                            "type": "boolean",
+                                            "description": "Indica se as imagens representam a mesma pessoa"
+                                        },
+                                        "similarity_degree": {
                                             "type": "number",
-                                            "description": "Índice de semelhança entre as imagens"
+                                            "format": "float",
+                                            "description": "Nível de semelhança entre as imagens (0-1)",
+                                            "example": 0.87
+                                        },
+                                        "confidence": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "description": "Nível de confiança da comparação (0-1)",
+                                            "example": 0.95
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requisição inválida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "valido": {
+                                            "type": "boolean",
+                                            "example": false
                                         },
                                         "mensagem": {
                                             "type": "string",
-                                            "description": "Mensagem adicional sobre a comparação"
+                                            "example": "Formato de imagem inválido ou não suportado"
+                                        },
+                                        "erro": {
+                                            "type": "string",
+                                            "description": "Detalhes do erro"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado - Token inválido ou ausente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Token de autenticação necessário"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "A requisição não pôde ser processada porque um token de autenticação válido não foi fornecido"
                                         }
                                     }
                                 }
@@ -503,8 +642,6 @@ const swaggerDocument = {
         }
     }
 }
-
-
 
 // Servir especificação Swagger como JSON
 app.get('/swagger.json', (req, res) => {
