@@ -69,7 +69,21 @@ const swaggerDocument = {
             "get": {
                 "summary": "Verifica se a API está funcionando",
                 "description": "Retorna \"pong\" para confirmar que a API está online",
-                "tags": ["TESTE"],
+                "tags": [
+                    "TESTE"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "required": true,
+                        "description": "Token de autenticação",
+                        "schema": {
+                            "type": "string",
+                            "example": "Bearer <seu-token-aqui>"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Resposta bem-sucedida",
@@ -94,14 +108,30 @@ const swaggerDocument = {
             "post": {
                 "summary": "Verifica a validade de um código NCM (via body)",
                 "description": "Verifica se o código NCM fornecido no corpo da requisição é válido",
-                "tags": ["NCM"],
+                "tags": [
+                    "NCM"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "required": true,
+                        "description": "Token de autenticação",
+                        "schema": {
+                            "type": "string",
+                            "example": "Bearer <seu-token-aqui>"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "required": ["codigo"],
+                                "required": [
+                                    "codigo"
+                                ],
                                 "properties": {
                                     "codigo": {
                                         "type": "string",
@@ -193,7 +223,9 @@ const swaggerDocument = {
             "get": {
                 "summary": "Verifica a validade de um código NCM (via parâmetro)",
                 "description": "Verifica se o código NCM fornecido como parâmetro de URL é válido",
-                "tags": ["NCM"],
+                "tags": [
+                    "NCM"
+                ],
                 "parameters": [
                     {
                         "in": "path",
@@ -204,6 +236,16 @@ const swaggerDocument = {
                             "type": "string"
                         },
                         "example": "0306.93.00"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "required": true,
+                        "description": "Token de autenticação",
+                        "schema": {
+                            "type": "string",
+                            "example": "Bearer <seu-token-aqui>"
+                        }
                     }
                 ],
                 "responses": {
@@ -286,7 +328,21 @@ const swaggerDocument = {
             "get": {
                 "summary": "Obter todos os NCMs disponíveis",
                 "description": "Retorna todos os dados de NCM disponíveis no SISCOMEX",
-                "tags": ["NCM"],
+                "tags": [
+                    "NCM"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "required": true,
+                        "description": "Token de autenticação",
+                        "schema": {
+                            "type": "string",
+                            "example": "Bearer <seu-token-aqui>"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Lista de NCMs",
@@ -355,9 +411,100 @@ const swaggerDocument = {
                     }
                 }
             }
+        },
+        "/compareImages": {
+            "post": {
+                "summary": "Compara duas imagens",
+                "description": "Compara duas imagens e retorna um resultado de semelhança",
+                "tags": [
+                    "Imagem"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "required": true,
+                        "description": "Token de autenticação",
+                        "schema": {
+                            "type": "string",
+                            "example": "Bearer <seu-token-aqui>"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "image1": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "Primeira imagem para comparação"
+                                    },
+                                    "image2": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "Segunda imagem para comparação"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Resultado da comparação de imagens",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "semelhança": {
+                                            "type": "number",
+                                            "description": "Índice de semelhança entre as imagens"
+                                        },
+                                        "mensagem": {
+                                            "type": "string",
+                                            "description": "Mensagem adicional sobre a comparação"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao comparar imagens",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "valido": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "mensagem": {
+                                            "type": "string",
+                                            "example": "Erro ao comparar imagens"
+                                        },
+                                        "erro": {
+                                            "type": "string",
+                                            "description": "Detalhes do erro"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
-};
+}
+
+
 
 // Servir especificação Swagger como JSON
 app.get('/swagger.json', (req, res) => {
