@@ -70,7 +70,7 @@ const swaggerDocument = {
                 "type": "http",
                 "scheme": "bearer",
                 "bearerFormat": "JWT",
-                "description": "Token de autenticação JWT"
+                "description": "Token de autenticação"
             }
         }
     },
