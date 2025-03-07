@@ -12,12 +12,12 @@ module.exports = {
                 imagem1: imagem1,
                 imagem2: imagem2
             })
-                .then(response => response.json())
-                .then(data => {
-                    res.json(data);
-                })
-                .catch(error => res.json(error))
         })
+            .then(response => response.json())
+            .then(data => {
+                res.json(data);
+            })
+            .catch(error => res.json(error))
     },
     async get(req, res) {
         res.json({ message: "TESTE" })
